@@ -13,23 +13,27 @@ driver.get(COURSE_SITE)
 course_name = driver.find_element(By.TAG_NAME, 'h4').text
 
 def seatsummary(n, delay):
-    last_num_registered = getCurrRegisteredFromFile()
+    last_num_saved = getCurrRegisteredFromFile()
+    print(last_num_saved)
     for i in range(n):
-        seat_info = driver.find_element(By.XPATH, '/html/body/div[2]/div[4]/table[4]/tbody').text
+        seat_summ = driver.find_element(By.XPATH, '/html/body/div[2]/div[4]/table[4]/tbody').text
 
-        to_print = f'\nSeat Summary for [{course_name}]\n@ {time.ctime()} @\n{seat_info}\n---'
+        next_num_saved = int(driver.find_element(By.XPATH, '/html/body/div[2]/div[4]/table[4]/tbody/tr[2]/td[2]/strong').text)
+
+        curr_write_time = time.ctime()
+
+        to_write = f'\nSeat Summary for [{course_name}]\n@ {curr_write_time}:\n{seat_summ}\n--------------------------------'
         f = open('scraped.txt', 'a')
-        f.write(to_print)
+        f.write(to_write)
         f.close()
-        print(last_num_registered)
 
-        next_num_registered = int(driver.find_element(By.XPATH, '/html/body/div[2]/div[4]/table[4]/tbody/tr[2]/td[2]/strong').text)
+        if (last_num_saved < next_num_saved):
+            sendMail(course_name, 'registered in', last_num_saved, next_num_saved, to_write)
+        elif (last_num_saved > next_num_saved):
+            sendMail(course_name, 'dropped', last_num_saved, next_num_saved, to_write)
+        last_num_saved = next_num_saved
 
-        if (last_num_registered < next_num_registered):
-            sendMail(course_name, 'registered in the course:', to_print)
-        elif (last_num_registered > next_num_registered):
-            sendMail(course_name, 'dropped the course:', to_print)
-        last_num_registered = next_num_registered
+        print(last_num_saved)
 
         driver.refresh()
         time.sleep(delay)
@@ -45,4 +49,11 @@ def getCurrRegisteredFromFile():
             last_num_registered += char
     return int(last_num_registered)
 
-seatsummary(5, 30)
+# !!! BUG
+# def getTimeFromFile():
+#     nlines = sum(1 for line in open('scraped.txt'))
+#     last_time = linecache.getline('scraped.txt', nlines - 5)
+#     print(last_time)
+#     return last_time
+
+seatsummary(1000, 120)
