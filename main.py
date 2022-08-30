@@ -1,18 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from logininfo import username, password
-
 driver = webdriver.Chrome()
-driver.get("https://ssc.adm.ubc.ca/sscportal/")
 driver.implicitly_wait(5)
+driver.get('https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=CPSC&course=304&section=2W1')
 
-driver.find_element(By.XPATH, '//a[@href="/sscportal/servlets/SRVSSCFramework"]').click()
+seat_info = driver.find_element(By.XPATH, '/html/body/div[2]/div[4]/table[4]').text
 
-username_box = driver.find_element(By.ID, 'username')
-password_box = driver.find_element(By.ID, 'password')
-submit_box = driver.find_element(By.CLASS_NAME, 'btn-submit')
+f = open('scraped.txt', 'a')
+f.write(f'\n{seat_info}\n---')
+f.close()
 
-username_box.send_keys(username)
-password_box.send_keys(password)
-submit_box.click()
+f = open('scraped.txt', 'r')
+print(f.read())
