@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from emailing import sendMail
 import time
 import linecache
 
@@ -25,9 +26,9 @@ def seatsummary(n, delay):
         next_num_registered = int(driver.find_element(By.XPATH, '/html/body/div[2]/div[4]/table[4]/tbody/tr[2]/td[2]/strong').text)
 
         if (last_num_registered < next_num_registered):
-            print(f'{next_num_registered - last_num_registered} person(s) registered in the course!')
+            sendMail(course_name, 'registered in the course:', to_print)
         elif (last_num_registered > next_num_registered):
-            print(f'{last_num_registered - next_num_registered} person(s) dropped the course!')
+            sendMail(course_name, 'dropped the course:', to_print)
         last_num_registered = next_num_registered
 
         driver.refresh()
@@ -38,10 +39,10 @@ def getCurrRegisteredFromFile():
     if (num_lines == 0):
         return -1
     last_registered_line = linecache.getline('scraped.txt', num_lines - 3)
-    empty_string = ''
+    last_num_registered = ''
     for char in last_registered_line:
         if char.isdigit():
-            empty_string += char
-    return int(empty_string)
+            last_num_registered += char
+    return int(last_num_registered)
 
-seatsummary(5, 5)
+seatsummary(5, 30)
