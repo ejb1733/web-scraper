@@ -5,7 +5,7 @@ from logininfo import EMAIL_ADDRESS, EMAIL_PASS
 
 def sendMail(courseName, studentAction, messageBody):
     msg = EmailMessage()
-    msg.set_content(f'Hey, you! Some student(s) has {studentAction}!\n\n {messageBody}')
+    msg.set_content(f'Hey, you! Some student(s) has {studentAction}\n {messageBody}')
     msg['Subject'] = f'Registration Alert for {courseName}'
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = EMAIL_ADDRESS
