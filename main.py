@@ -35,6 +35,8 @@ def seatsummary(n, delay):
 
 def getCurrRegisteredFromFile():
     num_lines = sum(1 for line in open('scraped.txt'))
+    if (num_lines == 0):
+        return -1
     last_registered_line = linecache.getline('scraped.txt', num_lines - 3)
     empty_string = ''
     for char in last_registered_line:
