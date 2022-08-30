@@ -2,9 +2,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
+COURSE_SITE = 'https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=CPSC&course=304&section=2W1'
+
 driver = webdriver.Chrome()
 driver.implicitly_wait(5)
-driver.get('https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-section&dept=CPSC&course=304&section=2W1')
+driver.get(COURSE_SITE)
 
 course_name = driver.find_element(By.TAG_NAME, 'h4').text
 
