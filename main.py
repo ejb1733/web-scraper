@@ -30,6 +30,7 @@ def seatsummary(n, delay):
             print(f'{last_num_registered - next_num_registered} person(s) dropped the course!')
         last_num_registered = next_num_registered
 
+        driver.refresh()
         time.sleep(delay)
 
 def getCurrRegisteredFromFile():
@@ -41,4 +42,4 @@ def getCurrRegisteredFromFile():
             empty_string += char
     return int(empty_string)
 
-seatsummary(20, 5)
+seatsummary(5, 5)
